@@ -26,7 +26,7 @@ import static org.mockito.Mockito.*;
  * @author Misagh Moayyed
  * @since 5.3.0
  */
-public class DefaultAcceptableUsagePolicyRepositoryTests {
+public class DefaultAcceptableUsagePolicyRepositoryTests extends BaseAcceptableUsagePolicyRepositoryTests {
     @ClassRule
     public static final SpringClassRule SPRING_CLASS_RULE = new SpringClassRule();
 
@@ -51,5 +51,10 @@ public class DefaultAcceptableUsagePolicyRepositoryTests {
         assertFalse(repo.verify(context, c).getLeft());
         assertTrue(repo.submit(context, c));
         assertTrue(repo.verify(context, c).getLeft());
+    }
+
+    @Override
+    public boolean hasLiveUpdates() {
+        return true;
     }
 }
