@@ -1,15 +1,14 @@
 package org.apereo.cas.consent;
 
-import org.apereo.cas.CipherExecutor;
-import org.apereo.cas.services.RegisteredServiceTestUtils;
-import org.apereo.cas.util.CollectionUtils;
+import org.apereo.cas.config.CasConsentCoreConfiguration;
 
-import lombok.val;
 import org.junit.AfterClass;
-import org.junit.Test;
-import org.springframework.core.io.FileSystemResource;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cloud.autoconfigure.RefreshAutoConfiguration;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.test.context.TestPropertySource;
 
-import static org.junit.Assert.*;
+import java.io.IOException;
 
 /**
  * This is {@link JsonConsentRepositoryTests}.
@@ -17,27 +16,18 @@ import static org.junit.Assert.*;
  * @author Misagh Moayyed
  * @since 5.3.0
  */
+@SpringBootTest(classes = {
+    CasConsentCoreConfiguration.class,
+    RefreshAutoConfiguration.class
+})
+@TestPropertySource(properties = {
+    "cas.consent.json.location=classpath:/ConsentRepository.json"
+})
 public class JsonConsentRepositoryTests {
-    private static final FileSystemResource JSON_FILE = new FileSystemResource("ConsentRepository.json");
+    private static final ClassPathResource JSON_FILE = new ClassPathResource("ConsentRepository.json");
 
     @AfterClass
-    public static void shutdown() {
+    public static void shutdown() throws IOException {
         JSON_FILE.getFile().delete();
-    }
-
-    @Test
-    public void verifyConsentDecisionStored() {
-        val builder = new DefaultConsentDecisionBuilder(CipherExecutor.noOpOfSerializableToString());
-        val regSvc = RegisteredServiceTestUtils.getRegisteredService("test");
-        val svc = RegisteredServiceTestUtils.getService();
-        val decision = builder.build(svc,
-            regSvc, "casuser",
-            CollectionUtils.wrap("attribute", "value"));
-        val repo = new JsonConsentRepository(JSON_FILE);
-        assertTrue(repo.storeConsentDecision(decision));
-
-        assertTrue(repo.getConsentDecisions().size() == 1);
-        val b = repo.deleteConsentDecision(decision.getId(), "casuser");
-        assertTrue(b);
     }
 }
