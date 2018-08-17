@@ -9,6 +9,8 @@ import lombok.val;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cloud.autoconfigure.RefreshAutoConfiguration;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockServletContext;
@@ -26,6 +28,9 @@ import static org.mockito.Mockito.*;
  * @author Misagh Moayyed
  * @since 5.3.0
  */
+@SpringBootTest(classes = {
+    RefreshAutoConfiguration.class,
+})
 public class DefaultAcceptableUsagePolicyRepositoryTests extends BaseAcceptableUsagePolicyRepositoryTests {
     @ClassRule
     public static final SpringClassRule SPRING_CLASS_RULE = new SpringClassRule();
