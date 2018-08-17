@@ -29,9 +29,6 @@ public abstract class BaseAuditConfigurationTests {
     @Rule
     public final SpringMethodRule springMethodRule = new SpringMethodRule();
 
-    @Rule
-    public final ConditionalIgnoreRule conditionalIgnoreRule = new ConditionalIgnoreRule();
-
     public abstract AuditTrailManager getAuditTrailManager();
 
     @Test
